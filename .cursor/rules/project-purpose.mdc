@@ -1,0 +1,9 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 目的
+purpose is experiment for drag-and-drop sorting feature.
+
+implement this feature without installing the drag-and-drop library.
