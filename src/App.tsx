@@ -1,9 +1,21 @@
 import { atom, useAtom } from "jotai";
 
+// 簡易的なランダムIDを生成する関数
+const generateId = () => Math.random().toString(36).substring(2, 10);
+
+// アイテムの型定義
+type Item = {
+  id: string;
+  text: string;
+};
+
 const n = 10; // 要素数を変数で指定
 // itemsのリストをatomで定義
 const itemsAtom = atom(
-  Array.from({ length: n }, (_, i) => `アイテム ${i + 1}`)
+  Array.from({ length: n }, (_, i) => ({
+    id: generateId(),
+    text: `アイテム ${i + 1}`,
+  })) satisfies Item[]
 );
 
 function App() {
@@ -17,7 +29,7 @@ function App() {
         </div>
         <ul className="divide-y divide-gray-200">
           {items.map((item, index) => (
-            <Item key={index} index={index} item={item} />
+            <ItemComponent key={item.id} index={index} item={item} />
           ))}
         </ul>
       </div>
@@ -25,13 +37,7 @@ function App() {
   );
 }
 
-// アイテムのコンポーネント
-type ItemProps = {
-  index: number;
-  item: string;
-};
-
-function Item({ index, item }: ItemProps) {
+function ItemComponent({ index, item }: { index: number; item: Item }) {
   return (
     <li className="px-6 py-4 hover:bg-gray-50 cursor-pointer transition-colors duration-150 flex items-center">
       {/* ドラッグハンドル */}
@@ -46,7 +52,7 @@ function Item({ index, item }: ItemProps) {
         </svg>
       </div>
       <div className="mr-3 text-gray-400">{index + 1}.</div>
-      <div className="font-medium">{item}</div>
+      <div className="font-medium">{item.text}</div>
     </li>
   );
 }
